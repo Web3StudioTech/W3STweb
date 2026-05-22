@@ -9,16 +9,15 @@
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* ===== THEME VARS ===== */
   :root {
     --bg: #0a0a0a;
     --fg: #f0ece0;
-    --fg2: rgba(240,236,224,0.6);
-    --fg3: rgba(240,236,224,0.35);
+    --fg2: rgba(240,236,224,0.65);
+    --fg3: rgba(240,236,224,0.4);
     --fg4: rgba(240,236,224,0.15);
     --border: rgba(240,236,224,0.15);
     --border2: rgba(240,236,224,0.08);
-    --nav-bg: rgba(10,10,10,0.92);
+    --nav-bg: rgba(10,10,10,0.93);
     --card-hover: rgba(240,236,224,0.04);
     --form-bg: transparent;
     --form-border: rgba(240,236,224,0.18);
@@ -29,14 +28,13 @@
   body.light-mode {
     --bg: #f5f1e8;
     --fg: #0a0a0a;
-    --fg2: rgba(10,10,10,0.65);
-    --fg3: rgba(10,10,10,0.4);
+    --fg2: rgba(10,10,10,0.68);
+    --fg3: rgba(10,10,10,0.42);
     --fg4: rgba(10,10,10,0.12);
     --border: rgba(10,10,10,0.15);
     --border2: rgba(10,10,10,0.08);
-    --nav-bg: rgba(245,241,232,0.95);
+    --nav-bg: rgba(245,241,232,0.96);
     --card-hover: rgba(10,10,10,0.03);
-    --form-bg: transparent;
     --form-border: rgba(10,10,10,0.2);
     --form-focus: rgba(10,10,10,0.5);
     --select-bg: #f5f1e8;
@@ -55,426 +53,267 @@
 
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.04;
-    pointer-events: none;
-    z-index: 9999;
+    opacity: 0.04; pointer-events: none; z-index: 9999;
   }
-
   body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
+    content: ''; position: fixed; inset: 0;
     background-image:
       repeating-linear-gradient(87deg, transparent 0px, transparent 120px, rgba(128,128,128,0.012) 120px, rgba(128,128,128,0.012) 121px),
       repeating-linear-gradient(92deg, transparent 0px, transparent 200px, rgba(128,128,128,0.008) 200px, rgba(128,128,128,0.008) 201px);
-    pointer-events: none;
-    z-index: 9998;
+    pointer-events: none; z-index: 9998;
   }
 
-  /* ===== NAV ===== */
+  /* NAV */
   nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2.5rem;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.75rem 2.5rem;
     border-bottom: 1px solid var(--border);
     background: var(--nav-bg);
     backdrop-filter: blur(6px);
     transition: background 0.3s, border-color 0.3s;
   }
 
-  .nav-left { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
-
-  .nav-logo-img { height: 36px; width: auto; object-fit: contain; }
-
-  .nav-brand {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-    font-size: 1.15rem;
-    color: var(--fg);
-    letter-spacing: 0.04em;
-    transition: color 0.3s;
-  }
-  .nav-brand span { opacity: 0.45; }
+  /* C1: full horizontal logo image in nav */
+  .nav-left { display: flex; align-items: center; text-decoration: none; }
+  .nav-logo-full { height: 40px; width: auto; object-fit: contain; display: block; }
 
   .nav-right { display: flex; align-items: center; gap: 1.8rem; }
-
   .nav-links { display: flex; gap: 2rem; list-style: none; }
-
   .nav-links a {
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--fg2);
-    text-decoration: none;
-    transition: color 0.2s;
-    position: relative;
+    font-family: 'Courier Prime', monospace; font-size: 0.75rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--fg2); text-decoration: none; transition: color 0.2s; position: relative;
   }
   .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -3px; left: 0; right: 0;
-    height: 1px;
-    background: var(--fg);
-    transform: scaleX(0);
-    transition: transform 0.2s;
+    content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+    height: 1px; background: var(--fg); transform: scaleX(0); transition: transform 0.2s;
   }
   .nav-links a:hover { color: var(--fg); }
   .nav-links a:hover::after { transform: scaleX(1); }
 
-  /* TOGGLE BUTTONS */
   .toggle-group { display: flex; align-items: center; gap: 0.6rem; }
-
   .toggle-btn {
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--fg2);
-    padding: 0.3rem 0.65rem;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
+    font-family: 'Courier Prime', monospace; font-size: 0.62rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--fg2); padding: 0.3rem 0.65rem; border-radius: 2px;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
   }
-  .toggle-btn:hover, .toggle-btn.active {
-    background: var(--fg);
-    color: var(--bg);
-    border-color: var(--fg);
-  }
+  .toggle-btn:hover, .toggle-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 
-  /* ===== HERO ===== */
+  /* HERO */
   .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 7rem 2rem 4rem;
-    position: relative;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 7rem 2rem 4rem; position: relative;
   }
-
   .hero::before {
     content: '+ · + · · + · + · · + · + · · + · + · · + · + · ·';
-    position: absolute;
-    top: 15%; left: 5%; right: 5%;
-    font-size: 0.7rem;
-    color: var(--fg4);
-    letter-spacing: 2rem;
-    line-height: 4rem;
-    pointer-events: none;
-    word-break: break-all;
+    position: absolute; top: 15%; left: 5%; right: 5%;
+    font-size: 0.7rem; color: var(--fg4);
+    letter-spacing: 2rem; line-height: 4rem;
+    pointer-events: none; word-break: break-all;
   }
 
   .hero-title {
     font-family: 'Oswald', sans-serif;
     font-size: clamp(3.5rem, 9vw, 7rem);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 0.95;
-    color: var(--fg);
-    text-transform: uppercase;
-    margin-bottom: 0.3rem;
+    font-weight: 700; letter-spacing: -0.01em; line-height: 0.95;
+    color: var(--fg); text-transform: uppercase; margin-bottom: 0.3rem;
   }
-  .hero-title span {
-    color: transparent;
-    -webkit-text-stroke: 1.5px var(--fg);
-  }
+  .hero-title span { color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
 
+  /* C3: more visible tagline */
   .hero-tagline {
     font-family: 'Courier Prime', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--fg3);
+    font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--fg2); /* was fg3 — bumped up for visibility */
     margin: 1.8rem 0 3rem;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
   }
-  .hero-tagline em { font-style: normal; color: var(--fg2); }
+  .hero-tagline em { font-style: normal; color: var(--fg); font-weight: 700; }
 
   .hero-cta-row { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
 
-  /* ===== BUTTONS ===== */
+  /* BUTTONS */
   .btn {
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 0.9rem 2.2rem;
-    border: 1.5px solid var(--fg);
-    color: var(--bg);
-    background: var(--fg);
-    cursor: pointer;
-    transition: all 0.2s;
-    display: inline-block;
-    border-radius: 2px;
+    font-family: 'Courier Prime', monospace; font-size: 0.75rem;
+    letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
+    padding: 0.9rem 2.2rem; border: 1.5px solid var(--fg);
+    color: var(--bg); background: var(--fg);
+    cursor: pointer; transition: all 0.2s; display: inline-block; border-radius: 2px;
   }
   .btn:hover { background: transparent; color: var(--fg); }
-
   .btn-outline { background: transparent; color: var(--fg); }
   .btn-outline:hover { background: var(--fg); color: var(--bg); }
 
-  /* ===== DIVIDER ===== */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 0 auto;
-    max-width: 900px;
-    padding: 0 2rem;
-  }
+  /* DIVIDER */
+  .divider { display: flex; align-items: center; gap: 1rem; margin: 0 auto; max-width: 900px; padding: 0 2rem; }
   .divider-line { flex: 1; height: 1px; background: var(--border); }
-  .divider-text {
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--fg3);
-    white-space: nowrap;
-  }
+  .divider-text { font-family: 'Courier Prime', monospace; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg3); white-space: nowrap; }
 
-  /* ===== SECTIONS ===== */
+  /* SECTIONS */
   section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
-
   .section-label {
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--fg3);
-    margin-bottom: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+    font-family: 'Courier Prime', monospace; font-size: 0.65rem;
+    letter-spacing: 0.35em; text-transform: uppercase; color: var(--fg3);
+    margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem;
   }
   .section-label::before { content: ''; width: 24px; height: 1px; background: var(--fg3); }
-
   .section-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--fg);
-    line-height: 1;
-    margin-bottom: 3rem;
+    font-family: 'Oswald', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700; text-transform: uppercase; color: var(--fg); line-height: 1; margin-bottom: 3rem;
   }
   .section-title span { color: transparent; -webkit-text-stroke: 1px var(--fg); }
 
-  /* ===== ABOUT ===== */
+  /* ABOUT */
   .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-
-  .about-text p {
-    font-size: 1rem;
-    line-height: 1.85;
-    color: var(--fg2);
-    margin-bottom: 1.2rem;
-  }
-
+  .about-text p { font-size: 1rem; line-height: 1.85; color: var(--fg2); margin-bottom: 1.2rem; }
   .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
   .stat-badge {
-    border: 1.5px solid var(--border);
-    border-radius: 3px;
-    padding: 1.4rem 1.2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s;
+    border: 1.5px solid var(--border); border-radius: 3px;
+    padding: 1.4rem 1.2rem; text-align: center; position: relative;
+    overflow: hidden; transition: border-color 0.3s;
   }
   .stat-badge::before { content: '+'; position: absolute; top: 4px; right: 6px; font-size: 0.6rem; color: var(--fg4); }
   .stat-badge::after  { content: '+'; position: absolute; bottom: 4px; left: 6px; font-size: 0.6rem; color: var(--fg4); }
+  /* C2: stat-num base size matches AI badge (2rem) — Biz Tech / Web App overridden inline to same */
+  .stat-num { font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 700; color: var(--fg); line-height: 1; display: block; }
+  .stat-label { font-family: 'Courier Prime', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg3); margin-top: 0.4rem; display: block; }
 
-  .stat-num {
-    font-family: 'Oswald', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--fg);
-    line-height: 1;
-    display: block;
-  }
-  .stat-label {
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--fg3);
-    margin-top: 0.4rem;
-    display: block;
-  }
-
-  /* ===== SERVICES ===== */
+  /* SERVICES */
   .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border: 1.5px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 1.5px solid var(--border); border-radius: 4px; overflow: hidden;
   }
   .service-card {
-    padding: 2rem 1.8rem;
-    border-right: 1px solid var(--border2);
-    border-bottom: 1px solid var(--border2);
-    position: relative;
-    transition: background 0.25s;
+    padding: 2rem 1.8rem; border-right: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border2); position: relative; transition: background 0.25s;
   }
   .service-card:hover { background: var(--card-hover); }
-
   .service-icon {
-    width: 42px; height: 42px;
-    border: 1.5px solid var(--border);
-    border-radius: 50%;
+    width: 42px; height: 42px; border: 1.5px solid var(--border); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    margin-bottom: 1.1rem;
-    font-size: 1rem;
-    color: var(--fg);
-    transition: border-color 0.3s;
+    margin-bottom: 1.1rem; color: var(--fg); transition: border-color 0.3s;
   }
-  .service-name {
-    font-family: 'Oswald', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--fg);
-    margin-bottom: 0.6rem;
-  }
+  .service-name { font-family: 'Oswald', sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--fg); margin-bottom: 0.6rem; }
   .service-desc { font-size: 0.85rem; line-height: 1.7; color: var(--fg2); }
   .service-num { position: absolute; top: 1rem; right: 1.2rem; font-family: 'Courier Prime', monospace; font-size: 0.62rem; color: var(--fg4); letter-spacing: 0.1em; }
 
-  /* ===== CONTACT ===== */
+  /* PARTNER SECTION */
+  .partner-section {
+    max-width: 1100px; margin: 0 auto; padding: 5rem 2rem;
+    text-align: center;
+  }
+  .partner-box {
+    border: 1.5px solid var(--border); border-radius: 4px;
+    padding: 3.5rem 3rem; position: relative;
+  }
+  .partner-box::before {
+    content: '+ · · +'; position: absolute; top: 1rem; left: 1.5rem;
+    font-size: 0.6rem; color: var(--fg4); letter-spacing: 0.5rem;
+  }
+  .partner-box::after {
+    content: '+ · · +'; position: absolute; bottom: 1rem; right: 1.5rem;
+    font-size: 0.6rem; color: var(--fg4); letter-spacing: 0.5rem;
+  }
+  .partner-icon {
+    width: 56px; height: 56px; border: 1.5px solid var(--border); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem; color: var(--fg);
+  }
+  .partner-title {
+    font-family: 'Oswald', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; text-transform: uppercase; color: var(--fg);
+    line-height: 1.05; margin-bottom: 1.5rem;
+  }
+  .partner-title span { color: transparent; -webkit-text-stroke: 1px var(--fg); }
+  .partner-desc { font-size: 1rem; line-height: 1.85; color: var(--fg2); max-width: 600px; margin: 0 auto 2rem; }
+
+  /* CONTACT */
   .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-
   .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
-
   .contact-item {
     display: flex; align-items: flex-start; gap: 1rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border2);
+    padding-bottom: 1.5rem; border-bottom: 1px solid var(--border2);
   }
   .contact-item:last-child { border-bottom: none; }
-
   .contact-icon {
-    width: 36px; height: 36px;
-    border: 1px solid var(--border);
-    border-radius: 50%;
+    width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    color: var(--fg);
-    transition: border-color 0.3s;
+    flex-shrink: 0; color: var(--fg); transition: border-color 0.3s;
   }
-  .contact-detail-label {
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--fg3);
-    margin-bottom: 0.3rem;
-  }
+  .contact-detail-label { font-family: 'Courier Prime', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--fg3); margin-bottom: 0.3rem; }
   .contact-detail-value { font-size: 0.9rem; color: var(--fg2); line-height: 1.5; }
   .contact-detail-value a { color: var(--fg2); text-decoration: none; transition: color 0.2s; }
   .contact-detail-value a:hover { color: var(--fg); text-decoration: underline; }
 
+  /* WhatsApp button */
+  .wa-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'Courier Prime', monospace; font-size: 0.72rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--border); border-radius: 2px;
+    padding: 0.45rem 1rem; color: var(--fg2);
+    text-decoration: none; transition: all 0.2s; margin-top: 0.3rem; display: inline-flex;
+  }
+  .wa-btn:hover { border-color: var(--fg); color: var(--fg); background: var(--card-hover); }
+
   .contact-badge-wrap {
-    border: 1.5px solid var(--border);
-    border-radius: 4px;
-    padding: 2.5rem 2rem;
-    position: relative;
-    transition: border-color 0.3s;
+    border: 1.5px solid var(--border); border-radius: 4px;
+    padding: 2.5rem 2rem; position: relative; transition: border-color 0.3s;
   }
   .contact-badge-wrap::before {
     content: attr(data-label);
-    position: absolute;
-    top: -0.65rem; left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg);
-    padding: 0 1rem;
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    color: var(--fg3);
-    white-space: nowrap;
+    position: absolute; top: -0.65rem; left: 50%; transform: translateX(-50%);
+    background: var(--bg); padding: 0 1rem;
+    font-family: 'Courier Prime', monospace; font-size: 0.65rem;
+    letter-spacing: 0.25em; color: var(--fg3); white-space: nowrap;
     transition: background 0.3s, color 0.3s;
   }
 
-  .form-group { margin-bottom: 1.2rem; }
+  .form-group { margin-bottom: 1.1rem; }
   .form-group label {
-    display: block;
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--fg3);
-    margin-bottom: 0.4rem;
+    display: block; font-family: 'Courier Prime', monospace; font-size: 0.62rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg3); margin-bottom: 0.4rem;
   }
   .form-group input,
   .form-group textarea,
   .form-group select {
-    width: 100%;
-    background: var(--form-bg);
-    border: 1px solid var(--form-border);
-    border-radius: 2px;
-    padding: 0.75rem 1rem;
-    font-family: 'Special Elite', serif;
-    font-size: 0.88rem;
-    color: var(--fg);
-    outline: none;
-    transition: border-color 0.2s, background 0.3s, color 0.3s;
-    resize: none;
-    appearance: none;
-    -webkit-appearance: none;
+    width: 100%; background: var(--form-bg);
+    border: 1px solid var(--form-border); border-radius: 2px;
+    padding: 0.72rem 1rem;
+    font-family: 'Special Elite', serif; font-size: 0.88rem; color: var(--fg);
+    outline: none; transition: border-color 0.2s, background 0.3s, color 0.3s;
+    resize: none; appearance: none; -webkit-appearance: none;
   }
   .form-group select {
     background: var(--select-bg);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    padding-right: 2.5rem;
-    cursor: pointer;
+    background-repeat: no-repeat; background-position: right 1rem center;
+    padding-right: 2.5rem; cursor: pointer;
   }
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus { border-color: var(--form-focus); }
-  .form-group input::placeholder,
-  .form-group textarea::placeholder { color: var(--fg3); }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--form-focus); }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--fg3); }
   .form-group select option { background: var(--select-bg); color: var(--fg); }
 
   .form-submit {
-    width: 100%;
-    background: var(--fg);
-    color: var(--bg);
-    border: 1.5px solid var(--fg);
-    padding: 0.9rem;
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
-    margin-top: 0.5rem;
+    width: 100%; background: var(--fg); color: var(--bg);
+    border: 1.5px solid var(--fg); padding: 0.9rem;
+    font-family: 'Courier Prime', monospace; font-size: 0.75rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; border-radius: 2px; transition: all 0.2s; margin-top: 0.5rem;
   }
   .form-submit:hover { background: transparent; color: var(--fg); }
 
-  /* ===== FOOTER ===== */
+  /* FOOTER */
   footer {
-    border-top: 1px solid var(--border);
-    padding: 2.5rem 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-    transition: border-color 0.3s;
+    border-top: 1px solid var(--border); padding: 2.5rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem; transition: border-color 0.3s;
   }
   .footer-brand { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 0.1em; color: var(--fg3); text-transform: uppercase; }
   .footer-copy { font-family: 'Courier Prime', monospace; font-size: 0.65rem; letter-spacing: 0.15em; color: var(--fg4); text-align: center; }
@@ -484,7 +323,7 @@
   .scatter { position: absolute; font-family: 'Courier Prime', monospace; font-size: 0.6rem; color: var(--fg4); pointer-events: none; user-select: none; }
 
   @media (max-width: 768px) {
-    nav { padding: 0.9rem 1.2rem; }
+    nav { padding: 0.75rem 1.2rem; }
     .nav-links { display: none; }
     .about-grid, .contact-wrap { grid-template-columns: 1fr; gap: 2rem; }
     .services-grid { grid-template-columns: 1fr; }
@@ -492,6 +331,7 @@
     footer { flex-direction: column; text-align: center; }
     .toggle-group { gap: 0.4rem; }
     .toggle-btn { font-size: 0.55rem; padding: 0.25rem 0.5rem; }
+    .partner-box { padding: 2.5rem 1.5rem; }
   }
 </style>
 </head>
@@ -499,21 +339,17 @@
 
 <!-- NAV -->
 <nav>
+  <!-- C1: full horizontal Web3TechLogo.png -->
   <a class="nav-left" href="#">
-    <img src="W3TLOGO8.png" class="nav-logo-img" alt="Web3 Studio Tech Logo"
-      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-    <!-- fallback SVG if image missing -->
-    <svg style="display:none;width:34px;height:34px;" viewBox="0 0 80 80" fill="none">
-      <polygon points="8,8 40,40 72,8 78,8 40,48 2,8" fill="currentColor"/>
-      <polygon points="18,52 40,74 62,52 68,52 40,80 12,52" fill="currentColor" opacity="0.55"/>
-    </svg>
-    <span class="nav-brand">Web3Studio<span>Tech</span></span>
+    <img src="Web3TechLogo.png" class="nav-logo-full" alt="Web3 Studio Tech"
+      onerror="this.onerror=null;this.src='W3TLOGO8.png';this.style.height='36px';">
   </a>
 
   <div class="nav-right">
     <ul class="nav-links">
       <li><a href="#about" data-en="About" data-zh="关于我们">关于我们</a></li>
       <li><a href="#services" data-en="Services" data-zh="服务">服务</a></li>
+      <li><a href="#partner" data-en="Partner" data-zh="合作伙伴">合作伙伴</a></li>
       <li><a href="#contact" data-en="Contact" data-zh="联系我们">联系我们</a></li>
     </ul>
     <div class="toggle-group">
@@ -530,15 +366,9 @@
   <span class="scatter" style="bottom:20%;left:6%">○</span>
   <span class="scatter" style="bottom:25%;right:7%">○</span>
 
-  <!-- Logo image (comment 1 & 3) -->
-  <div style="margin-bottom:1.8rem;">
-    <img src="Web3TechLogo.png" alt="Web3 Studio Tech" style="height:64px;width:auto;object-fit:contain;"
-      onerror="this.style.display='none';">
-  </div>
-
   <h1 class="hero-title">Web3<br><span>Studio</span><br>Tech</h1>
 
-  <!-- Comment 4: updated tagline -->
+  <!-- C3: brighter tagline -->
   <p class="hero-tagline">
     <em data-en="BUILDING THE FUTURE" data-zh="构建未来">构建未来</em>
     <span data-en=" · APP · WEB3 · AI · BLOCKCHAIN · MULTIMEDIA" data-zh=" · 应用 · Web3 · 人工智能 · 区块链 · 多媒体"> · 应用 · Web3 · 人工智能 · 区块链 · 多媒体</span>
@@ -559,43 +389,47 @@
 <!-- ABOUT -->
 <section id="about">
   <div class="section-label" data-en="Who We Are" data-zh="关于我们">关于我们</div>
-  <h2 class="section-title" data-en="We Build<br><span>Tomorrow's</span><br>Digital Stack" data-zh="我们构建<br><span>明日的</span><br>数字基础">我们构建<br><span>明日的</span><br>数字基础</h2>
+  <!-- C4: corrected Mandarin title -->
+  <h2 class="section-title"
+      data-en="We Build<br><span>Tomorrow's</span><br>Digital Stack"
+      data-zh="共同构建<br><span>明日的</span><br>数码基础">共同构建<br><span>明日的</span><br>数码基础</h2>
 
   <div class="about-grid">
     <div class="about-text">
-      <!-- Comment 5: updated copy -->
       <p data-en="Web3 Studio Tech is a technology based studio specialising in Web & App development, Business Tech Solutions, Blockchain Development, AI solutions, and Creative Multimedia production."
          data-zh="Web3 Studio Tech 是一家专注于网页与应用开发、商业科技解决方案、区块链开发、人工智能解决方案及创意多媒体制作的科技工作室。">
         Web3 Studio Tech 是一家专注于网页与应用开发、商业科技解决方案、区块链开发、人工智能解决方案及创意多媒体制作的科技工作室。
       </p>
-      <p data-en="We work at the intersection of emerging technology and practical business needs — helping companies, startups, and creators launch their native digital products & solutions."
+      <p data-en="We work at the intersection of emerging technology and practical business needs — helping companies, startups, and creators launch their native digital products &amp; solutions."
          data-zh="我们在新兴科技与实际商业需求的交汇点上运作，助力企业、初创公司和创作者推出属于自己的数字产品与解决方案。">
         我们在新兴科技与实际商业需求的交汇点上运作，助力企业、初创公司和创作者推出属于自己的数字产品与解决方案。
       </p>
+      <!-- C4: corrected last sentence -->
       <p data-en="We're the team you call if you want to build fast. We'll make it easy for you to onboard."
-         data-zh="如果您想快速落地，我们就是您需要的团队。我们将让您的入驻过程简单顺畅。">
-        如果您想快速落地，我们就是您需要的团队。我们将让您的入驻过程简单顺畅。
+         data-zh="如果您想快速落地，我们就是您需要的团队。我们协助让您的入驻过程简单顺畅。">
+        如果您想快速落地，我们就是您需要的团队。我们协助让您的入驻过程简单顺畅。
       </p>
       <a href="#contact" class="btn btn-outline" style="margin-top:1rem;font-size:0.7rem;padding:0.75rem 1.8rem;"
          data-en="Let's Build Together →" data-zh="携手共建 →">携手共建 →</a>
     </div>
 
     <div class="about-stats">
-      <!-- Comment 9: replace top two badges -->
+      <!-- C2: font-size same as AI (2rem) via .stat-num default, removed override -->
       <div class="stat-badge">
-        <span class="stat-num" style="font-size:1.4rem;" data-en="Biz Tech" data-zh="商业科技">商业科技</span>
+        <span class="stat-num" data-en="Biz Tech" data-zh="商业科技">商业科技</span>
         <span class="stat-label" data-en="Solutions" data-zh="解决方案">解决方案</span>
       </div>
       <div class="stat-badge">
-        <span class="stat-num" style="font-size:1.4rem;" data-en="Web App" data-zh="网页应用">网页应用</span>
+        <span class="stat-num" data-en="Web App" data-zh="网页应用">网页应用</span>
         <span class="stat-label" data-en="Development" data-zh="开发">开发</span>
       </div>
       <div class="stat-badge">
         <span class="stat-num">Web3</span>
         <span class="stat-label" data-en="Native Studio" data-zh="原生工作室">原生工作室</span>
       </div>
+      <!-- C5: AI shows as 人工智能 in ZH, AI in EN -->
       <div class="stat-badge">
-        <span class="stat-num">AI</span>
+        <span class="stat-num" data-en="AI" data-zh="人工智能" style="font-size:1.7rem;">人工智能</span>
         <span class="stat-label" data-en="Powered Solutions" data-zh="驱动解决方案">驱动解决方案</span>
       </div>
     </div>
@@ -611,8 +445,10 @@
 <!-- SERVICES -->
 <section id="services">
   <div class="section-label" data-en="What We Do" data-zh="我们的业务">我们的业务</div>
-  <!-- Comment 8: Five Core Services -->
-  <h2 class="section-title"><span data-en="Five" data-zh="五项">五项</span> <span data-en="Core" data-zh="核心">核心</span><br><span data-en="Services" data-zh="服务">服务</span></h2>
+  <h2 class="section-title">
+    <span data-en="Five" data-zh="五项">五项</span> <span data-en="Core" data-zh="核心">核心</span><br>
+    <span data-en="Services" data-zh="服务">服务</span>
+  </h2>
 
   <div class="services-grid">
     <div class="service-card">
@@ -645,7 +481,6 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
       </div>
       <div class="service-name" data-en="Blockchain Development" data-zh="区块链开发">区块链开发</div>
-      <!-- Comment 8: updated blockchain description -->
       <p class="service-desc" data-en="Smart Contracts, NFT collections, DeFi integrations and Web3 dApps across various Public Blockchain."
          data-zh="涵盖各类公链上的智能合约、NFT 系列、DeFi 集成及 Web3 去中心化应用开发。">
         涵盖各类公链上的智能合约、NFT 系列、DeFi 集成及 Web3 去中心化应用开发。
@@ -676,7 +511,7 @@
       </p>
     </div>
 
-    <div class="service-card" style="display:flex;align-items:center;justify-content:center;text-align:center;background:var(--card-hover);">
+    <div class="service-card" style="display:flex;align-items:center;justify-content:center;text-align:center;">
       <div>
         <div style="font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--fg3);margin-bottom:0.8rem;"
              data-en="Ready to start?" data-zh="准备好开始了吗？">准备好开始了吗？</div>
@@ -689,6 +524,36 @@
 
 <div class="divider">
   <div class="divider-line"></div>
+  <span class="divider-text" data-en="— Partner —" data-zh="— 合作伙伴 —">— 合作伙伴 —</span>
+  <div class="divider-line"></div>
+</div>
+
+<!-- C6: PARTNER & AGENT PROGRAM SECTION -->
+<div class="partner-section" id="partner">
+  <div class="section-label" style="justify-content:center;" data-en="Collaboration" data-zh="合作机会">合作机会</div>
+  <div class="partner-box">
+    <div class="partner-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </div>
+    <h2 class="partner-title"
+        data-en="Partner &amp; <span>Agent</span> Program"
+        data-zh="合作伙伴 &amp; <span>代理</span>计划">合作伙伴 &amp; <span>代理</span>计划</h2>
+    <p class="partner-desc"
+       data-en="We are open for collaboration. Welcome to contact us to discuss a Partner and Dealer program."
+       data-zh="我们欢迎各方合作。诚邀您联系我们，共同探讨合作伙伴与经销商计划的合作机会。">
+      我们欢迎各方合作。诚邀您联系我们，共同探讨合作伙伴与经销商计划的合作机会。
+    </p>
+    <a href="#contact" class="btn" data-en="Contact Us →" data-zh="联系我们 →">联系我们 →</a>
+  </div>
+</div>
+
+<div class="divider">
+  <div class="divider-line"></div>
   <span class="divider-text" data-en="— Contact —" data-zh="— 联系我们 —">— 联系我们 —</span>
   <div class="divider-line"></div>
 </div>
@@ -696,7 +561,7 @@
 <!-- CONTACT -->
 <section id="contact">
   <div class="section-label" data-en="Reach Out" data-zh="联系我们">联系我们</div>
-  <h2 class="section-title" data-en="Let's Work Together" data-zh="携手合作">携手<br><span>合作</span></h2>
+  <h2 class="section-title" data-en="Let's Work<br><span>Together</span>" data-zh="携手<br><span>合作</span>">携手<br><span>合作</span></h2>
 
   <div class="contact-wrap">
     <div class="contact-info">
@@ -710,16 +575,18 @@
         </div>
       </div>
 
-      <!-- Comment 6: WhatsApp link, no name -->
+      <!-- C7: corrected number 010-9895913, WhatsApp link -->
       <div class="contact-item">
         <div class="contact-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
         </div>
         <div>
           <div class="contact-detail-label" data-en="WhatsApp" data-zh="WhatsApp">WhatsApp</div>
-          <div class="contact-detail-value">
-            <a href="https://wa.me/60109895813" target="_blank" rel="noopener">+60 10-9895813</a>
-          </div>
+          <div class="contact-detail-value">010-9895913</div>
+          <a class="wa-btn" href="https://wa.me/60109895913" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <span data-en="Chat on WhatsApp" data-zh="WhatsApp 咨询">WhatsApp 咨询</span>
+          </a>
         </div>
       </div>
 
@@ -729,9 +596,7 @@
         </div>
         <div>
           <div class="contact-detail-label" data-en="Email" data-zh="电子邮件">电子邮件</div>
-          <div class="contact-detail-value">
-            <a href="mailto:Web3StudioTech@gmail.com">Web3StudioTech@gmail.com</a>
-          </div>
+          <div class="contact-detail-value"><a href="mailto:Web3StudioTech@gmail.com">Web3StudioTech@gmail.com</a></div>
         </div>
       </div>
 
@@ -741,15 +606,12 @@
         </div>
         <div>
           <div class="contact-detail-label" data-en="Website" data-zh="网站">网站</div>
-          <div class="contact-detail-value">
-            <a href="https://Web3StudioTech.com" target="_blank">Web3StudioTech.com</a>
-          </div>
+          <div class="contact-detail-value"><a href="https://Web3StudioTech.com" target="_blank">Web3StudioTech.com</a></div>
         </div>
       </div>
     </div>
 
-    <!-- Comment 7: form updates -->
-    <div class="contact-badge-wrap" data-label="[ GET IN TOUCH ]">
+    <div class="contact-badge-wrap" data-label="[ 联系我们 ]">
       <form id="contactForm" action="mailto:Web3StudioTech@gmail.com" method="POST" enctype="text/plain">
         <div class="form-group">
           <label data-en="Your Name" data-zh="您的姓名">您的姓名</label>
@@ -758,6 +620,18 @@
         <div class="form-group">
           <label data-en="Email Address" data-zh="电子邮件地址">电子邮件地址</label>
           <input type="email" name="email" placeholder="Web3StudioTech@gmail.com">
+        </div>
+        <!-- C (comment 6 form): I Am dropdown -->
+        <div class="form-group">
+          <label data-en="I Am" data-zh="我是">我是</label>
+          <select name="iam">
+            <option value="" disabled selected data-en="— Select category —" data-zh="— 请选择类别 —">— 请选择类别 —</option>
+            <option value="Corporate" data-en="Corporate" data-zh="企业">企业</option>
+            <option value="SME" data-en="SME" data-zh="中小企业">中小企业</option>
+            <option value="Agency" data-en="Agency" data-zh="代理机构">代理机构</option>
+            <option value="Dealer" data-en="Dealer" data-zh="经销商">经销商</option>
+            <option value="NGO" data-en="NGO" data-zh="非政府组织">非政府组织</option>
+          </select>
         </div>
         <div class="form-group">
           <label data-en="Service Needed" data-zh="所需服务">所需服务</label>
@@ -772,7 +646,7 @@
         </div>
         <div class="form-group">
           <label data-en="Message" data-zh="留言">留言</label>
-          <textarea rows="4" name="message" placeholder="告诉我们您的项目需求..."></textarea>
+          <textarea rows="3" name="message" placeholder="告诉我们您的项目需求..."></textarea>
         </div>
         <button type="submit" class="form-submit" data-en="Send Message →" data-zh="发送留言 →">发送留言 →</button>
       </form>
@@ -788,21 +662,14 @@
 </footer>
 
 <script>
-  /* ===== THEME TOGGLE (Comment 10) ===== */
-  // Default: dark mode
   let isDark = true;
+  let isZh = true;
 
   function toggleTheme() {
     isDark = !isDark;
     document.body.classList.toggle('light-mode', !isDark);
     document.getElementById('themeToggle').textContent = isDark ? '☀' : '☾';
-    // update contact badge label bg
-    document.querySelector('.contact-badge-wrap').style.setProperty('--bg', isDark ? '#0a0a0a' : '#f5f1e8');
   }
-
-  /* ===== LANGUAGE TOGGLE (Comment 10) ===== */
-  // Default: Mandarin (zh)
-  let isZh = true;
 
   function toggleLang() {
     isZh = !isZh;
@@ -810,34 +677,27 @@
     document.documentElement.lang = isZh ? 'zh' : 'en';
     document.getElementById('langToggle').textContent = isZh ? 'EN' : '中文';
 
-    // Update all elements with data-en / data-zh
     document.querySelectorAll('[data-en][data-zh]').forEach(el => {
-      const text = el.getAttribute('data-' + lang);
-      if (text) {
-        // Handle innerHTML for elements that contain HTML tags
-        if (text.includes('<') || el.tagName === 'H2') {
-          el.innerHTML = text;
-        } else {
-          el.textContent = text;
-        }
+      const val = el.getAttribute('data-' + lang);
+      if (!val) return;
+      if (val.includes('<') || el.tagName === 'H2') {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
       }
     });
 
-    // Update select options
     document.querySelectorAll('select option[data-en][data-zh]').forEach(opt => {
       opt.textContent = opt.getAttribute('data-' + lang);
     });
 
-    // Update textarea placeholder
     const ta = document.querySelector('textarea[name="message"]');
     if (ta) ta.placeholder = isZh ? '告诉我们您的项目需求...' : 'Tell us about your project...';
 
-    // Update contact badge label
     const badge = document.querySelector('.contact-badge-wrap');
     if (badge) badge.setAttribute('data-label', isZh ? '[ 联系我们 ]' : '[ GET IN TOUCH ]');
   }
 
-  /* ===== PARALLAX ===== */
   window.addEventListener('scroll', () => {
     const hero = document.querySelector('.hero');
     const y = window.scrollY;
