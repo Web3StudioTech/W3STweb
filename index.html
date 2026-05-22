@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -339,10 +339,8 @@
 
 <!-- NAV -->
 <nav>
-  <!-- C1: full horizontal Web3TechLogo.png -->
-  <a class="nav-left" href="#">
-    <img src="Web3TechLogo.png" class="nav-logo-full" alt="Web3 Studio Tech"
-      onerror="this.onerror=null;this.src='W3TLOGO8.png';this.style.height='36px';">
+  <a class="nav-left" href="#" style="text-decoration:none;display:flex;align-items:center;">
+    <img src="NEW_LOGO_transparent.png" alt="Web3 Studio Tech" style="height:38px;width:auto;object-fit:contain;">
   </a>
 
   <div class="nav-right">
@@ -663,7 +661,25 @@
 
 <script>
   let isDark = true;
-  let isZh = true;
+  let isZh = false; // default: English
+
+  // Apply English on load
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('langToggle').textContent = '中文';
+    document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+      const val = el.getAttribute('data-en');
+      if (!val) return;
+      if (val.includes('<') || el.tagName === 'H2') { el.innerHTML = val; }
+      else { el.textContent = val; }
+    });
+    document.querySelectorAll('select option[data-en][data-zh]').forEach(opt => {
+      opt.textContent = opt.getAttribute('data-en');
+    });
+    const ta = document.querySelector('textarea[name="message"]');
+    if (ta) ta.placeholder = 'Tell us about your project...';
+    const badge = document.querySelector('.contact-badge-wrap');
+    if (badge) badge.setAttribute('data-label', '[ GET IN TOUCH ]');
+  });
 
   function toggleTheme() {
     isDark = !isDark;
