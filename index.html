@@ -321,6 +321,9 @@
   .footer-link:hover { color: var(--fg); }
 
   .scatter { position: absolute; font-family: 'Courier Prime', monospace; font-size: 0.6rem; color: var(--fg4); pointer-events: none; user-select: none; }
+  /* Logo always visible in both modes via var(--fg) */
+  body.light-mode .nav-left svg text,
+  body.light-mode .nav-left svg path { fill: #0a0a0a; }
 
   @media (max-width: 768px) {
     nav { padding: 0.75rem 1.2rem; }
@@ -340,7 +343,14 @@
 <!-- NAV -->
 <nav>
   <a class="nav-left" href="#" style="text-decoration:none;display:flex;align-items:center;">
-    <img src="NEW_LOGO_transparent.png" alt="Web3 Studio Tech" style="height:38px;width:auto;object-fit:contain;">
+    <svg width="180" height="44" viewBox="0 0 520 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- MV mark: M top shape -->
+      <path d="M8,10 L8,72 L22,72 L22,34 L46,60 L70,34 L70,72 L84,72 L84,10 L70,10 L46,38 L22,10 Z" fill="var(--fg)"/>
+      <!-- V bottom chevron -->
+      <path d="M18,80 L46,112 L74,80 L62,80 L46,98 L30,80 Z" fill="var(--fg)"/>
+      <!-- Web3Tech wordmark -->
+      <text x="104" y="84" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="68" fill="var(--fg)">Web3Tech</text>
+    </svg>
   </a>
 
   <div class="nav-right">
