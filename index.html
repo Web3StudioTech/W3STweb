@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web3 Studio Tech</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Permanent+Marker&family=Oswald:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f0ece0;
+    --gray: #888;
+    --chalk: #e8e4d4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Special Elite', serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* SCRATCH MARKS */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(87deg, transparent 0px, transparent 120px, rgba(255,255,255,0.012) 120px, rgba(255,255,255,0.012) 121px),
+      repeating-linear-gradient(92deg, transparent 0px, transparent 200px, rgba(255,255,255,0.008) 200px, rgba(255,255,255,0.008) 201px);
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    border-bottom: 1px solid rgba(240,236,224,0.12);
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(4px);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+  }
+
+  .nav-brand {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(240,236,224,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0; right: 0;
+    height: 1px;
+    background: var(--white);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+  }
+
+  /* Star dots scattered */
+  .hero::before {
+    content: '+ · + · · + · + · · + · + · · + · + · · + · + · ·';
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    right: 5%;
+    font-size: 0.7rem;
+    color: rgba(240,236,224,0.15);
+    letter-spacing: 2rem;
+    line-height: 4rem;
+    pointer-events: none;
+    word-break: break-all;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid rgba(240,236,224,0.3);
+    border-radius: 2px;
+    padding: 0.35rem 1.2rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(240,236,224,0.5);
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .hero-badge::before, .hero-badge::after {
+    content: '—';
+    margin: 0 0.5rem;
+    opacity: 0.4;
+  }
+
+  .hero-logo-wrap {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-logo-svg {
+    width: 80px;
+    height: 80px;
+    filter: drop-shadow(0 0 20px rgba(240,236,224,0.15));
+  }
+
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 0.95;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+  }
+
+  .hero-title span {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--white);
+  }
+
+  .hero-tagline {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(240,236,224,0.45);
+    margin: 1.8rem 0 3rem;
+  }
+
+  .hero-tagline em {
+    font-style: normal;
+    color: rgba(240,236,224,0.7);
+  }
+
+  .hero-cta-row {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.9rem 2.2rem;
+    border: 1.5px solid var(--white);
+    color: var(--black);
+    background: var(--white);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+    border-radius: 2px;
+  }
+
+  .btn:hover {
+    background: transparent;
+    color: var(--white);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+  }
+
+  .btn-outline:hover {
+    background: var(--white);
+    color: var(--black);
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 0 2rem;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(240,236,224,0.15);
+  }
+
+  .divider-text {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(240,236,224,0.3);
+    white-space: nowrap;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(240,236,224,0.35);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: rgba(240,236,224,0.3);
+  }
+
+  .section-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 3rem;
+  }
+
+  .section-title span {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--white);
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: rgba(240,236,224,0.7);
+    margin-bottom: 1.2rem;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-badge {
+    border: 1.5px solid rgba(240,236,224,0.2);
+    border-radius: 3px;
+    padding: 1.4rem 1.2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-badge::before {
+    content: '+';
+    position: absolute;
+    top: 4px; right: 6px;
+    font-size: 0.6rem;
+    color: rgba(240,236,224,0.2);
+  }
+
+  .stat-badge::after {
+    content: '+';
+    position: absolute;
+    bottom: 4px; left: 6px;
+    font-size: 0.6rem;
+    color: rgba(240,236,224,0.2);
+  }
+
+  .stat-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(240,236,224,0.4);
+    margin-top: 0.4rem;
+    display: block;
+  }
+
+  /* SERVICES */
+  #services { max-width: 1100px; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5px;
+    border: 1.5px solid rgba(240,236,224,0.15);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .service-card {
+    padding: 2.2rem 2rem;
+    border: none;
+    border-right: 1.5px solid rgba(240,236,224,0.1);
+    border-bottom: 1.5px solid rgba(240,236,224,0.1);
+    position: relative;
+    transition: background 0.25s;
+    cursor: default;
+  }
+
+  .service-card:hover {
+    background: rgba(240,236,224,0.04);
+  }
+
+  .service-icon {
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid rgba(240,236,224,0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  .service-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.7rem;
+  }
+
+  .service-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(240,236,224,0.5);
+  }
+
+  .service-num {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.4rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    color: rgba(240,236,224,0.2);
+    letter-spacing: 0.1em;
+  }
+
+  /* CONTACT */
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(240,236,224,0.08);
+  }
+
+  .contact-item:last-child { border-bottom: none; }
+
+  .contact-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(240,236,224,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    margin-top: 0.1rem;
+  }
+
+  .contact-detail-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(240,236,224,0.3);
+    margin-bottom: 0.3rem;
+  }
+
+  .contact-detail-value {
+    font-size: 0.92rem;
+    color: rgba(240,236,224,0.75);
+    line-height: 1.5;
+  }
+
+  /* CHALK BADGE styled form area */
+  .contact-badge-wrap {
+    border: 1.5px solid rgba(240,236,224,0.2);
+    border-radius: 4px;
+    padding: 2.5rem 2rem;
+    position: relative;
+  }
+
+  .contact-badge-wrap::before {
+    content: '[ GET IN TOUCH ]';
+    position: absolute;
+    top: -0.65rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--black);
+    padding: 0 1rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: rgba(240,236,224,0.35);
+    white-space: nowrap;
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(240,236,224,0.35);
+    margin-bottom: 0.4rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(240,236,224,0.18);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    font-family: 'Special Elite', serif;
+    font-size: 0.88rem;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: rgba(240,236,224,0.5);
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(240,236,224,0.2);
+  }
+
+  .form-submit {
+    width: 100%;
+    background: var(--white);
+    color: var(--black);
+    border: none;
+    padding: 0.9rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .form-submit:hover {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid var(--white);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(240,236,224,0.1);
+    padding: 2.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    color: rgba(240,236,224,0.4);
+    text-transform: uppercase;
+  }
+
+  .footer-copy {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: rgba(240,236,224,0.2);
+    text-align: center;
+  }
+
+  .footer-link {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: rgba(240,236,224,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-link:hover { color: var(--white); }
+
+  /* SCATTER DOTS decorative */
+  .scatter {
+    position: absolute;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.6rem;
+    color: rgba(240,236,224,0.12);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* HOVER DISTRESS on section titles */
+  .section-title:hover {
+    letter-spacing: 0.04em;
+    transition: letter-spacing 0.3s;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .about-grid, .contact-wrap { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-title { font-size: 3rem; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg class="logo-mark" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="10,8 30,28 50,8 56,8 30,36 4,8" fill="#f0ece0"/>
+      <polygon points="16,38 30,52 44,38 50,38 30,60 10,38" fill="#f0ece0" opacity="0.7"/>
+    </svg>
+    <span class="nav-brand">Web3Studio<span style="opacity:0.4">Tech</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero" style="position:relative;">
+  <span class="scatter" style="top:22%;left:3%">+ · +<br>· + ·<br>+ · +</span>
+  <span class="scatter" style="top:30%;right:4%">· + ·<br>+ · +<br>· + ·</span>
+  <span class="scatter" style="bottom:20%;left:6%">○</span>
+  <span class="scatter" style="bottom:25%;right:7%">○</span>
+
+  <div class="hero-badge">Kuala Lumpur, Malaysia</div>
+
+  <div class="hero-logo-wrap">
+    <svg class="hero-logo-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="8,8 40,40 72,8 78,8 40,48 2,8" fill="#f0ece0"/>
+      <polygon points="18,52 40,74 62,52 68,52 40,80 12,52" fill="#f0ece0" opacity="0.55"/>
+    </svg>
+  </div>
+
+  <h1 class="hero-title">Web3<br><span>Studio</span><br>Tech</h1>
+
+  <p class="hero-tagline">
+    <em>Building the future</em> · Web3 · AI · Blockchain · Creative
+  </p>
+
+  <div class="hero-cta-row">
+    <a href="#services" class="btn">Explore Services</a>
+    <a href="#contact" class="btn btn-outline">Work With Us</a>
+  </div>
+</div>
+
+<div class="divider" style="margin-bottom:2rem;">
+  <div class="divider-line"></div>
+  <span class="divider-text">Est. Kuala Lumpur · Andrew Shin</span>
+  <div class="divider-line"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">Who We Are</div>
+  <h2 class="section-title">We Build<br><span>Tomorrow's</span><br>Digital Stack</h2>
+
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Web3 Studio Tech is a Kuala Lumpur-based technology studio specialising in blockchain development, AI solutions, and creative digital production.</p>
+      <p>We work at the intersection of emerging technology and practical business needs — helping companies, startups, and creators launch bold digital products that actually work.</p>
+      <p>From smart contracts to automation pipelines, from websites to multimedia production, we are the team you call when you need it done right.</p>
+      <a href="#contact" class="btn btn-outline" style="margin-top:1rem; font-size:0.7rem; padding:0.75rem 1.8rem;">Let's Build Together →</a>
+    </div>
+
+    <div class="about-stats">
+      <div class="stat-badge">
+        <span class="stat-num">5+</span>
+        <span class="stat-label">Years in Tech</span>
+      </div>
+      <div class="stat-badge">
+        <span class="stat-num">50+</span>
+        <span class="stat-label">Projects Built</span>
+      </div>
+      <div class="stat-badge">
+        <span class="stat-num">Web3</span>
+        <span class="stat-label">Native Studio</span>
+      </div>
+      <div class="stat-badge">
+        <span class="stat-num">AI</span>
+        <span class="stat-label">Powered Solutions</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="margin-bottom:0;">
+  <div class="divider-line"></div>
+  <span class="divider-text">— Services —</span>
+  <div class="divider-line"></div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title"><span>Five</span> Core<br>Disciplines</h2>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-num">01</span>
+      <div class="service-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <div class="service-name">Web & App Development</div>
+      <p class="service-desc">Full-stack websites and mobile applications built for performance, scale, and real-world users. From landing pages to complex platforms.</p>
+    </div>
+
+    <div class="service-card">
+      <span class="service-num">02</span>
+      <div class="service-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      </div>
+      <div class="service-name">Business Tech Solutions</div>
+      <p class="service-desc">Technology strategy and implementation for businesses looking to modernise operations, digitise workflows, and scale efficiently.</p>
+    </div>
+
+    <div class="service-card">
+      <span class="service-num">03</span>
+      <div class="service-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      </div>
+      <div class="service-name">Blockchain Development</div>
+      <p class="service-desc">Smart contracts, NFT collections, DeFi integrations, and Web3 dApps across Bitcoin, Ethereum, Dogecoin, and emerging chains.</p>
+    </div>
+
+    <div class="service-card">
+      <span class="service-num">04</span>
+      <div class="service-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      </div>
+      <div class="service-name">AI & Automation</div>
+      <p class="service-desc">Custom AI integrations, workflow automation, and intelligent systems that save time and unlock new capabilities for your business.</p>
+    </div>
+
+    <div class="service-card" style="grid-column: span 1;">
+      <span class="service-num">05</span>
+      <div class="service-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      </div>
+      <div class="service-name">Creative Multimedia Production</div>
+      <p class="service-desc">Brand identity, motion graphics, digital content, and multimedia assets that make your project stand out in a crowded market.</p>
+    </div>
+
+    <div class="service-card" style="display:flex; align-items:center; justify-content:center; text-align:center; background: rgba(240,236,224,0.03);">
+      <div>
+        <div style="font-family:'Courier Prime',monospace; font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(240,236,224,0.3); margin-bottom:0.8rem;">Ready to start?</div>
+        <a href="#contact" class="btn" style="font-size:0.7rem;">Get a Quote →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider">
+  <div class="divider-line"></div>
+  <span class="divider-text">— Contact —</span>
+  <div class="divider-line"></div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Reach Out</div>
+  <h2 class="section-title">Let's Work<br><span>Together</span></h2>
+
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <div class="contact-detail-label">Address</div>
+          <div class="contact-detail-value">1C, Jalan 54, Taman Desa Jaya,<br>52100 Kuala Lumpur.</div>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 9.12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="contact-detail-label">Phone</div>
+          <div class="contact-detail-value">Andrew Shin · 010-9895813</div>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </div>
+        <div>
+          <div class="contact-detail-label">Email</div>
+          <div class="contact-detail-value">Web3StudioTech@gmail.com</div>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        </div>
+        <div>
+          <div class="contact-detail-label">Website</div>
+          <div class="contact-detail-value">Web3StudioTech.com</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-badge-wrap">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Andrew Shin">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="hello@yourdomain.com">
+      </div>
+      <div class="form-group">
+        <label>Service Needed</label>
+        <input type="text" placeholder="e.g. Blockchain Development">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="4" placeholder="Tell us about your project..."></textarea>
+      </div>
+      <button class="form-submit">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Web3 Studio Tech</div>
+  <div class="footer-copy">© 2025 Web3 Studio Tech · Kuala Lumpur, Malaysia<br>Built with craft & code by Andrew Shin</div>
+  <a href="mailto:Web3StudioTech@gmail.com" class="footer-link">Web3StudioTech@gmail.com</a>
+</footer>
+
+<script>
+  document.querySelector('.form-submit').addEventListener('click', function() {
+    this.textContent = 'Message Sent ✓';
+    this.style.background = 'transparent';
+    this.style.color = '#f0ece0';
+    this.style.border = '1px solid #f0ece0';
+    setTimeout(() => {
+      this.textContent = 'Send Message →';
+      this.style.background = '#f0ece0';
+      this.style.color = '#0a0a0a';
+      this.style.border = 'none';
+    }, 3000);
+  });
+
+  // Subtle parallax on hero
+  window.addEventListener('scroll', () => {
+    const hero = document.querySelector('.hero');
+    const y = window.scrollY;
+    hero.style.transform = `translateY(${y * 0.3}px)`;
+    hero.style.opacity = 1 - y / 600;
+  });
+</script>
+</body>
+</html>
