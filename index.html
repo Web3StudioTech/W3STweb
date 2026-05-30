@@ -3,8 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Web3 Studio Tech</title>
-<link rel="icon" type="image/png" href="W3TLOGO8.png">
+<title>Web3 Studio Tech | Web3, AI & Blockchain Development Malaysia</title>
+<meta name="description" content="Web3 Studio Tech — Malaysia's leading Web3, AI & Blockchain development studio. We build Web & App solutions, Smart Contracts, NFT projects, AI Automation and Creative Multimedia for businesses across Malaysia, Asia and worldwide.">
+<meta name="keywords" content="Web3 development Malaysia, blockchain development Kuala Lumpur, AI solutions Malaysia, NFT development, smart contracts, web app development KL, business tech solutions, creative multimedia Malaysia">
+<meta name="author" content="Web3 Studio Tech">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://web3studiotech.com/">
+
+<!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://web3studiotech.com/">
+<meta property="og:title" content="Web3 Studio Tech | Web3, AI & Blockchain Development Malaysia">
+<meta property="og:description" content="Web3 Studio Tech — Malaysia's leading Web3, AI & Blockchain development studio. We build Web & App solutions, Smart Contracts, NFT projects, AI Automation and Creative Multimedia for businesses across Malaysia, Asia and worldwide.">
+<meta property="og:image" content="https://web3studiotech.com/W3TLOGO8.png">
+<meta property="og:locale" content="en_MY">
+<meta property="og:site_name" content="Web3 Studio Tech">
+
+<!-- Twitter / X Cards -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://web3studiotech.com/">
+<meta name="twitter:title" content="Web3 Studio Tech | Web3, AI & Blockchain Development Malaysia">
+<meta name="twitter:description" content="Web3 Studio Tech — Malaysia's leading Web3, AI & Blockchain development studio. We build Web & App solutions, Smart Contracts, NFT projects, AI Automation and Creative Multimedia for businesses across Malaysia, Asia and worldwide.">
+<meta name="twitter:image" content="https://web3studiotech.com/W3TLOGO8.png">
+
+<!-- Schema.org Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Web3 Studio Tech",
+  "url": "https://web3studiotech.com/",
+  "logo": "https://web3studiotech.com/W3TLOGO8.png",
+  "description": "Web3 Studio Tech — Malaysia's leading Web3, AI & Blockchain development studio. We build Web & App solutions, Smart Contracts, NFT projects, AI Automation and Creative Multimedia for businesses across Malaysia, Asia and worldwide.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1C, Jalan 54, Taman Desa Jaya",
+    "addressLocality": "Kuala Lumpur",
+    "postalCode": "52100",
+    "addressCountry": "MY"
+  },
+  "telephone": "+60109895913",
+  "email": "Web3StudioTech@gmail.com",
+  "sameAs": [
+    "https://Web3StudioTech.com"
+  ],
+  "serviceType": [
+    "Web & App Development",
+    "Blockchain Development",
+    "AI & Automation",
+    "Business Tech Solutions",
+    "Creative Multimedia Production"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Malaysia"
+  }
+}
+</script>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -620,7 +677,11 @@
     </div>
 
     <div class="contact-badge-wrap" data-label="[ 联系我们 ]">
-      <form id="contactForm" action="mailto:Web3StudioTech@gmail.com" method="POST" enctype="text/plain">
+      <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="d490b624-7466-4d40-b9bf-60657c42b156">
+        <input type="hidden" name="subject" value="New Enquiry — Web3 Studio Tech Website">
+        <input type="hidden" name="redirect" value="false">
+        <input type="checkbox" name="botcheck" style="display:none;">
         <div class="form-group">
           <label data-en="Your Name" data-zh="您的姓名">您的姓名</label>
           <input type="text" name="name" placeholder="Alex Tan">
@@ -730,6 +791,43 @@
     if (y < window.innerHeight) {
       hero.style.transform = `translateY(${y * 0.25}px)`;
       hero.style.opacity = 1 - y / 650;
+    }
+  });
+
+  // Web3Forms AJAX submission
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.form-submit');
+    const originalText = btn.textContent;
+    btn.textContent = isZh ? '发送中...' : 'Sending...';
+    btn.disabled = true;
+
+    const formData = new FormData(this);
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST', body: formData
+      });
+      const data = await res.json();
+      if (data.success) {
+        btn.textContent = isZh ? '✓ 发送成功！' : '✓ Message Sent!';
+        btn.style.background = 'transparent';
+        btn.style.color = 'var(--fg)';
+        this.reset();
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = 'var(--fg)';
+          btn.style.color = 'var(--bg)';
+          btn.disabled = false;
+        }, 4000);
+      } else {
+        btn.textContent = isZh ? '✗ 发送失败，请重试' : '✗ Failed, please try again';
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = originalText; }, 3000);
+      }
+    } catch(err) {
+      btn.textContent = isZh ? '✗ 网络错误，请重试' : '✗ Network error, try again';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = originalText; }, 3000);
     }
   });
 </script>
